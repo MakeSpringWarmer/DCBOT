@@ -42,16 +42,16 @@ def get_cpbl_now():
     game_status_dict['game_end'] = game_end 
         
 
-    game_wait_list = soup.find('div', {'class': 'IndexScheduleList major'}).select('div.game_item:not([class*=" "])')
-    if game_wait_list:
-        for game in game_wait_list:
-            box = game.find('div', {'class': 'VSBox'})
-            away_team_href = box.find('div',{'class':'team away'}).find('div',{'class':'team_name'}).a['href']
-            away_team_name = team_name_dict[away_team_href]
-            home_team_href = box.find('div',{'class':'team home'}).find('div',{'class':'team_name'}).a['href']
-            home_team_name = team_name_dict[home_team_href]
-            game_wait.append("{} : {}".format(away_team_name,  home_team_name))
-    game_status_dict['game_wait'] = game_wait 
+    # game_wait_list = soup.find('div', {'class': 'IndexScheduleList major'}).select('div.game_item:not([class*=" "])')
+    # if game_wait_list:
+    #     for game in game_wait_list:
+    #         box = game.find('div', {'class': 'VSBox'})
+    #         away_team_href = box.find('div',{'class':'team away'}).find('div',{'class':'team_name'}).a['href']
+    #         away_team_name = team_name_dict[away_team_href]
+    #         home_team_href = box.find('div',{'class':'team home'}).find('div',{'class':'team_name'}).a['href']
+    #         home_team_name = team_name_dict[home_team_href]
+    #         game_wait.append("{} : {}".format(away_team_name,  home_team_name))
+    # game_status_dict['game_wait'] = game_wait 
 
     game_live_list = soup.find('div', {'class': 'IndexScheduleList major'}).find_all('div', {'class': 'game_item live'})
     if game_live_list:
@@ -63,5 +63,18 @@ def get_cpbl_now():
             home_team_score = box.find('div',{'class':'score'}).find('div',{'class':'num home'}).text
             game_live.append("{} {} : {} {}".format(away_team_name, away_team_score, home_team_score, home_team_name))
     game_status_dict['game_live'] = game_live 
+
+    if not game_live_list and not game_end_list:
+        game_wait_list = soup.find('div', {'class': 'IndexScheduleList major'}).find_all('div', {'class': 'game_item live'})
+        if game_wait_list:
+            for game in game_wait_list:
+                box = game.find('div', {'class': 'VSBox'})
+                away_team_href = box.find('div',{'class':'team away'}).find('div',                        {'class':'team_name'}).a['href']
+                away_team_name = team_name_dict[away_team_href]
+                home_team_href = box.find('div',{'class':'team home'}).find('div',                        {'class':'team_name'}).a['href']
+                home_team_name = team_name_dict[home_team_href]
+                game_wait.append("{} : {}".format(away_team_name,  home_team_name))
+    game_status_dict['game_wait'] = game_wait 
+    
     return game_status_dict
     

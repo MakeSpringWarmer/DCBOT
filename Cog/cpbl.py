@@ -20,12 +20,16 @@ class Cpbl(commands.Cog):
         if game_status_dict['game_end']:
             for game in game_status_dict['game_end']:
                 embed.add_field(name=game, value="比賽結束", inline=False)
-        if game_status_dict['game_wait']:
-            for game in game_status_dict['game_wait']:
-                embed.add_field(name=game, value="比賽未開始", inline=False) 
+        
         if game_status_dict['game_live']:
             for game in game_status_dict['game_live']:
                 embed.add_field(name=game, value="比賽進行中", inline=False)
+
+        if game_status_dict['game_wait']:
+            for game in game_status_dict['game_wait']:
+                embed.add_field(name=game, value="比賽未開始", inline=False)
+        if not game_status_dict['game_end'] and not game_status_dict['game_live'] and not game_status_dict['game_wait'] :
+            embed.add_field(name='今日無比賽進行', value="比賽未開始", inline=False)
         await ctx.send(embed=embed)
     
 async def setup(bot):
